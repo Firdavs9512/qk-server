@@ -7,8 +7,8 @@ import (
 )
 
 type Server struct {
-	host string
-	port int
+	Host string
+	Port int
 }
 
 func (s *Server) Start() {
@@ -18,5 +18,5 @@ func (s *Server) Start() {
 		ctx.JSON(iris.Map{"message": "Hello, World!"})
 	})
 
-	app.Listen(fmt.Sprintf("%s:%d", s.host, s.port))
+	app.Listen(fmt.Sprintf("%s:%d", s.Host, s.Port))
 }
