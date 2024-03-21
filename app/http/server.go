@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/Firdavs9512/qk-server/app/http/controllers"
+	"github.com/Firdavs9512/qk-server/config"
 	"github.com/kataras/iris/v12"
 	"github.com/kataras/iris/v12/mvc"
 )
@@ -15,6 +16,9 @@ type Server struct {
 
 func (s *Server) Start() {
 	app := iris.Default()
+
+	// Configure
+	app.Use(iris.LimitRequestBodySize(config.App.MaxFileSize))
 
 	app.Get("/", func(ctx iris.Context) {
 		ctx.JSON(iris.Map{"message": "Hello, World!"})
