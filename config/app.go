@@ -5,6 +5,8 @@ type AppType struct {
 	Version   string
 	Author    string
 	UploadUrl string
+	AppHost   string
+	AppPort   int
 }
 
 var (
@@ -13,5 +15,7 @@ var (
 		Version:   "0.0.1",
 		Author:    "Firdavs",
 		UploadUrl: "uploads/",
+		AppHost:   "localhost",
+		AppPort:   2595,
 	}
 )
