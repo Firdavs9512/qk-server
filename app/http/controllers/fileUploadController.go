@@ -22,15 +22,15 @@ func (f *FileUploadController) Post(ctx iris.Context) int {
 	form := ctx.Request().MultipartForm
 
 	files := form.File["files[]"]
-	failures := 0
 	for _, file := range files {
 		_, err = ctx.SaveFormFile(file, filepath.Join(config.App.UploadUrl, file.Filename))
 		if err != nil {
-			failures++
-			ctx.Writef("Error: %s\n", err.Error())
+			ctx.JSON(iris.Map{"status": "error", "message": err.Error()})
+			return iris.StatusInternalServerError
 		}
 	}
-	ctx.Writef("%d files uploaded", len(files)-failures)
+
+	ctx.JSON(iris.Map{"status": "success", "message": "Files uploaded successfully"})
 
 	return iris.StatusCreated
 }
