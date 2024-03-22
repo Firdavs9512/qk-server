@@ -15,7 +15,11 @@ type Server struct {
 }
 
 func (s *Server) Start() {
+	// Create a new Iris application
 	app := iris.Default()
+
+	// Init database
+	config.Database.Init()
 
 	// Configure
 	app.Use(iris.LimitRequestBodySize(config.App.MaxFileSize))
