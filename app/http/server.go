@@ -5,6 +5,7 @@ import (
 
 	"github.com/Firdavs9512/qk-server/app/http/controllers"
 	"github.com/Firdavs9512/qk-server/config"
+	"github.com/Firdavs9512/qk-server/core"
 	"github.com/kataras/iris/v12"
 	"github.com/kataras/iris/v12/mvc"
 )
@@ -20,6 +21,9 @@ func (s *Server) Start() {
 
 	// Init database
 	config.Database.Init()
+
+	// Init file directory
+	core.Init()
 
 	// Configure
 	app.Use(iris.LimitRequestBodySize(config.App.MaxFileSize))
