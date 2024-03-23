@@ -28,6 +28,14 @@ func (d *DatabaseType) Set(db *DatabaseType) {
 	Database = *db
 }
 
+func (d *DatabaseType) GetConnection() string {
+	return d.connection
+}
+
+func (d *DatabaseType) GetHost() string {
+	return d.host
+}
+
 func (d *DatabaseType) Init() {
 	var err error
 	d.DB, err = gorm.Open(sqlite.Open(d.host), &gorm.Config{})
