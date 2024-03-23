@@ -3,7 +3,9 @@ package controllers
 import (
 	"path/filepath"
 
+	"github.com/Firdavs9512/qk-server/app/models"
 	"github.com/Firdavs9512/qk-server/config"
+	"github.com/google/uuid"
 	"github.com/kataras/iris/v12"
 )
 
@@ -20,17 +22,30 @@ func (f *FileUploadController) Post(ctx iris.Context) int {
 	}
 
 	form := ctx.Request().MultipartForm
-
 	files := form.File["files[]"]
-	failures := 0
+	var fileNames []string
+
 	for _, file := range files {
-		_, err = ctx.SaveFormFile(file, filepath.Join(config.App.UploadUrl, file.Filename))
+		uuidModel := uuid.New().String()
+		filePath := filepath.Join(config.App.UploadUrl, uuidModel)
+
+		_, err = ctx.SaveFormFile(file, filePath)
 		if err != nil {
-			failures++
-			ctx.Writef("Error: %s\n", err.Error())
+			ctx.JSON(iris.Map{"status": "error", "message": err.Error()})
+			return iris.StatusInternalServerError
+		} else {
+			// Save file to database
+			var files models.Files
+			files.Uuid = uuidModel
+			files.Name = file.Filename
+			files.Path = filePath
+			fileNames = append(fileNames, filePath)
+
+			config.Database.DB.Create(&files)
 		}
 	}
-	ctx.Writef("%d files uploaded", len(files)-failures)
+
+	ctx.JSON(iris.Map{"status": "success", "message": "Files uploaded successfully", "files": fileNames})
 
 	return iris.StatusCreated
 }
