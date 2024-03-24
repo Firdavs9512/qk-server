@@ -10,6 +10,8 @@ import (
 func StartInitiation() {
 	// Init database
 	config.Database.Init()
+	// Migrate database models
+	Migrate()
 
 	// Init file directory
 	InitDirectory()

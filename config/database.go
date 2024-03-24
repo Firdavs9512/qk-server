@@ -3,7 +3,6 @@ package config
 import (
 	"fmt"
 
-	"github.com/Firdavs9512/qk-server/app/models"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
@@ -42,9 +41,6 @@ func (d *DatabaseType) Init() {
 	if err != nil {
 		panic("failed to connect database")
 	}
-
-	// Migrate the schema
-	d.DB.AutoMigrate(&models.Files{}, &models.Settings{})
 
 	fmt.Println("Database connected!")
 }
