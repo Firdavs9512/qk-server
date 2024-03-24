@@ -13,6 +13,9 @@ func StartInitiation() {
 	// Migrate database models
 	Migrate()
 
+	// Init config
+	ConfigInit()
+
 	// Init file directory
 	InitDirectory()
 
