@@ -44,7 +44,7 @@ func (d *DatabaseType) Init() {
 	}
 
 	// Migrate the schema
-	d.DB.AutoMigrate(&models.Files{})
+	d.DB.AutoMigrate(&models.Files{}, &models.Settings{})
 
 	fmt.Println("Database connected!")
 }
