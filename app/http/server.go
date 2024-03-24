@@ -5,35 +5,36 @@ import (
 
 	"github.com/Firdavs9512/qk-server/app/http/controllers"
 	"github.com/Firdavs9512/qk-server/config"
-	"github.com/Firdavs9512/qk-server/core"
 	"github.com/kataras/iris/v12"
 	"github.com/kataras/iris/v12/mvc"
 )
 
-type Server struct {
-	Host string
-	Port int
-}
+type Server struct{}
+
+var Application *iris.Application
 
 func (s *Server) Start() {
 	// Create a new Iris application
-	app := iris.Default()
-
-	// Init database
-	config.Database.Init()
-
-	// Init file directory
-	core.Init()
+	Application = iris.Default()
 
 	// Configure
-	app.Use(iris.LimitRequestBodySize(config.App.MaxFileSize))
+	Application.Use(iris.LimitRequestBodySize(config.App.MaxFileSize))
 
-	app.Get("/", func(ctx iris.Context) {
-		ctx.JSON(iris.Map{"message": "Hello, World!"})
+	Application.Get("/", func(ctx iris.Context) {
+		ctx.JSON(iris.Map{"message": "Ok!"})
 	})
 
-	mvc := mvc.New(app.Party("/upload"))
+	mvc := mvc.New(Application.Party("/upload"))
 	mvc.Handle(new(controllers.FileUploadController))
 
-	app.Listen(fmt.Sprintf("%s:%d", s.Host, s.Port))
+	Application.Listen(fmt.Sprintf("%s:%d", config.App.AppHost, config.App.AppPort))
+}
+
+func RestartServer() {
+	if Application != nil {
+		Application.ConfigureHost(func(h *iris.Supervisor) {
+			// Restart the server
+			h.Server.Addr = fmt.Sprintf("%s:%d", config.App.AppHost, config.App.AppPort)
+		})
+	}
 }

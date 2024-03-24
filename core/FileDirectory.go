@@ -7,7 +7,7 @@ import (
 	"github.com/Firdavs9512/qk-server/config"
 )
 
-func Init() {
+func InitDirectory() {
 	CreateDirectory(config.App.UploadUrl)
 }
 

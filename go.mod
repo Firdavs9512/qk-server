@@ -2,7 +2,13 @@ module github.com/Firdavs9512/qk-server
 
 go 1.22.0
 
-require github.com/kataras/iris/v12 v12.2.10
+require (
+	github.com/fatih/color v1.15.0
+	github.com/google/uuid v1.5.0
+	github.com/kataras/iris/v12 v12.2.10
+	gorm.io/driver/sqlite v1.5.5
+	gorm.io/gorm v1.25.8
+)
 
 require (
 	github.com/BurntSushi/toml v1.3.2 // indirect
@@ -20,7 +26,6 @@ require (
 	github.com/gobwas/ws v1.3.2 // indirect
 	github.com/golang/snappy v0.0.4 // indirect
 	github.com/gomarkdown/markdown v0.0.0-20231222211730-1d6d20845b47 // indirect
-	github.com/google/uuid v1.5.0 // indirect
 	github.com/gorilla/css v1.0.0 // indirect
 	github.com/gorilla/websocket v1.5.1 // indirect
 	github.com/iris-contrib/go.uuid v2.0.0+incompatible // indirect
@@ -38,6 +43,8 @@ require (
 	github.com/kr/pretty v0.3.1 // indirect
 	github.com/mailgun/raymond/v2 v2.0.48 // indirect
 	github.com/mailru/easyjson v0.7.7 // indirect
+	github.com/mattn/go-colorable v0.1.13 // indirect
+	github.com/mattn/go-isatty v0.0.19 // indirect
 	github.com/mattn/go-sqlite3 v1.14.22 // indirect
 	github.com/mediocregopher/radix/v3 v3.8.1 // indirect
 	github.com/microcosm-cc/bluemonday v1.0.26 // indirect
@@ -63,6 +70,4 @@ require (
 	google.golang.org/protobuf v1.32.0 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
-	gorm.io/driver/sqlite v1.5.5 // indirect
-	gorm.io/gorm v1.25.8 // indirect
 )

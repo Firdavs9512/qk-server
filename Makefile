@@ -13,7 +13,7 @@ build:
 	$(GOBUILD) -o $(BINARY_NAME_SERVER) -v cmd/server/main.go
 
 test:
-	$(GOTEST) -v ./...
+	$(GOTEST) -v ./test/...
 
 clean:
 	$(GOCLEAN)
@@ -25,3 +25,6 @@ cli:
 
 server:
 	$(GORUN) cmd/server/main.go
+
+rtest:
+	$(GOTEST) -v ./test/...
