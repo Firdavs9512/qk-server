@@ -8,6 +8,13 @@ import (
 )
 
 func StartInitiation() {
+	// Init database
+	config.Database.Init()
+
+	// Init file directory
+	InitDirectory()
+
+	// Console texts
 	startText()
 	authorText()
 	versionText()
