@@ -1,11 +1,15 @@
 package core
 
 import (
+	"fmt"
 	"strconv"
 
 	"github.com/Firdavs9512/qk-server/app/http"
 	"github.com/Firdavs9512/qk-server/app/models"
 	"github.com/Firdavs9512/qk-server/config"
+	"github.com/Firdavs9512/qk-server/utils"
+	"github.com/fatih/color"
+	"gorm.io/gorm"
 )
 
 // Local config files initialization in database
@@ -18,8 +22,8 @@ func ConfigInit() {
 
 	// Application host
 	var host *models.Settings
-	config.Database.DB.Where("key = ?", "app_host").First(&host)
-	if host == nil {
+	hResult := config.Database.DB.Where("key = ?", "app_host").First(&host)
+	if hResult.Error == gorm.ErrRecordNotFound {
 		config.Database.DB.Create(&models.Settings{
 			Key:   "app_host",
 			Value: config.App.AppHost,
@@ -31,8 +35,8 @@ func ConfigInit() {
 
 	// Application port
 	var port *models.Settings
-	config.Database.DB.Where("key = ?", "app_port").First(&port)
-	if port == nil {
+	pResult := config.Database.DB.Where("key = ?", "app_port").First(&port)
+	if pResult.Error == gorm.ErrRecordNotFound {
 		config.Database.DB.Create(&models.Settings{
 			Key:   "app_port",
 			Value: strconv.Itoa(config.App.AppPort),
@@ -48,8 +52,8 @@ func ConfigInit() {
 
 	// Application version
 	var version *models.Settings
-	config.Database.DB.Where("key = ?", "app_version").First(&version)
-	if version == nil {
+	vResult := config.Database.DB.Where("key = ?", "app_version").First(&version)
+	if vResult.Error == gorm.ErrRecordNotFound {
 		config.Database.DB.Create(&models.Settings{
 			Key:   "app_version",
 			Value: config.App.Version,
@@ -61,8 +65,8 @@ func ConfigInit() {
 
 	// Application Upload URL
 	var uploadUrl *models.Settings
-	config.Database.DB.Where("key = ?", "upload_url").First(&uploadUrl)
-	if uploadUrl == nil {
+	uResult := config.Database.DB.Where("key = ?", "upload_url").First(&uploadUrl)
+	if uResult.Error == gorm.ErrRecordNotFound {
 		config.Database.DB.Create(&models.Settings{
 			Key:   "upload_url",
 			Value: config.App.UploadUrl,
@@ -70,6 +74,20 @@ func ConfigInit() {
 		appConfig.UploadUrl = config.App.UploadUrl
 	} else {
 		appConfig.UploadUrl = uploadUrl.Value
+	}
+
+	// Check auth token if not exists create one
+	var count int64
+	config.Database.DB.Model(&models.AuthToken{}).Count(&count)
+	fmt.Printf("Auth Tokens: %d\n", count)
+	if count == 0 {
+		token := utils.RandomString(32)
+		config.Database.DB.Create(&models.AuthToken{
+			Token: token,
+			Name:  "Default",
+		})
+
+		fmt.Printf("Default Auth Token: %s\n", color.HiYellowString(token))
 	}
 
 	// Set the new config
