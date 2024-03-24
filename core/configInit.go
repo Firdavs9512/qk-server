@@ -79,7 +79,6 @@ func ConfigInit() {
 	// Check auth token if not exists create one
 	var count int64
 	config.Database.DB.Model(&models.AuthToken{}).Count(&count)
-	fmt.Printf("Auth Tokens: %d\n", count)
 	if count == 0 {
 		token := utils.RandomString(32)
 		config.Database.DB.Create(&models.AuthToken{
