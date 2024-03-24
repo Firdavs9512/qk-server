@@ -25,3 +25,6 @@ cli:
 
 server:
 	$(GORUN) cmd/server/main.go
+
+rtest:
+	$(GOTEST) -v ./test/...
