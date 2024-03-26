@@ -32,8 +32,6 @@ Simple use file manager server application.
 
 ### Configuration
 
-### Upgrading
-
 ## Credits
 
 - [Firdavs](https://github.com/Firdavs9512)
