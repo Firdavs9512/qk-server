@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/Firdavs9512/qk-server/app/http/controllers"
+	"github.com/Firdavs9512/qk-server/app/http/middleware"
 	"github.com/Firdavs9512/qk-server/config"
 	"github.com/kataras/iris/v12"
 	"github.com/kataras/iris/v12/mvc"
@@ -19,6 +20,7 @@ func (s *Server) Start() {
 
 	// Configure
 	Application.Use(iris.LimitRequestBodySize(config.App.MaxFileSize))
+	Application.Use(middleware.UserAuthMiddleware())
 
 	Application.Get("/", func(ctx iris.Context) {
 		ctx.JSON(iris.Map{"message": "Ok!"})
