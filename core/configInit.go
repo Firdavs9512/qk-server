@@ -17,8 +17,23 @@ func ConfigInit() {
 	var appConfig config.AppType
 	appConfig.Name = config.App.Name
 	appConfig.Author = config.App.Author
-	// TODO: Change this to database
-	appConfig.MaxFileSize = config.App.MaxFileSize
+
+	// Max file size
+	var maxFileSize *models.Settings
+	mResult := config.Database.DB.Where("key = ?", "max_file_size").First(&maxFileSize)
+	if mResult.Error == gorm.ErrRecordNotFound {
+		config.Database.DB.Create(&models.Settings{
+			Key:   "max_file_size",
+			Value: strconv.FormatInt(config.App.MaxFileSize, 10),
+		})
+		appConfig.MaxFileSize = config.App.MaxFileSize
+	} else {
+		number, err := strconv.ParseInt(maxFileSize.Value, 10, 64)
+		if err != nil {
+			number = int64(config.App.MaxFileSize)
+		}
+		appConfig.MaxFileSize = number
+	}
 
 	// Application host
 	var host *models.Settings
