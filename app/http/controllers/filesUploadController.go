@@ -12,11 +12,9 @@ import (
 type FilesUploadController struct{}
 
 func (f *FilesUploadController) Post(ctx iris.Context) int {
-	maxSize := ctx.Application().ConfigurationReadOnly().GetPostMaxMemory()
-
-	err := ctx.Request().ParseMultipartForm(maxSize)
+	err := ctx.Request().ParseMultipartForm(ctx.Application().ConfigurationReadOnly().GetPostMaxMemory())
 	if err != nil {
-		ctx.StopWithError(iris.StatusInternalServerError, err)
+		ctx.JSON(iris.Map{"status": "error", "message": "Error parsing form data"})
 		return iris.StatusInternalServerError
 	}
 
@@ -28,7 +26,7 @@ func (f *FilesUploadController) Post(ctx iris.Context) int {
 		uuidModel := uuid.New().String()
 		filePath := filepath.Join(config.App.UploadUrl, uuidModel)
 
-		_, err = ctx.SaveFormFile(file, filePath)
+		_, err := ctx.SaveFormFile(file, filePath)
 		if err != nil {
 			ctx.JSON(iris.Map{"status": "error", "message": err.Error()})
 			return iris.StatusInternalServerError

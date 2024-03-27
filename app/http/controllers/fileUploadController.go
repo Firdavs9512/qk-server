@@ -13,17 +13,9 @@ type FileUploadController struct {
 }
 
 func (f *FileUploadController) Post(ctx iris.Context) int {
-	maxSize := ctx.Application().ConfigurationReadOnly().GetPostMaxMemory()
-
-	err := ctx.Request().ParseMultipartForm(maxSize)
-	if err != nil {
-		ctx.StopWithError(iris.StatusInternalServerError, err)
-		return iris.StatusInternalServerError
-	}
-
 	_, fileHeader, err := ctx.FormFile("file")
 	if err != nil {
-		ctx.JSON(iris.Map{"status": "error", "message": err.Error()})
+		ctx.JSON(iris.Map{"status": "error", "message": "File is required"})
 		return iris.StatusInternalServerError
 	}
 
