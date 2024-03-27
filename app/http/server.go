@@ -7,7 +7,6 @@ import (
 	"github.com/Firdavs9512/qk-server/app/http/middleware"
 	"github.com/Firdavs9512/qk-server/config"
 	"github.com/kataras/iris/v12"
-	"github.com/kataras/iris/v12/mvc"
 )
 
 type Server struct{}
@@ -26,8 +25,16 @@ func (s *Server) Start() {
 		ctx.JSON(iris.Map{"message": "Ok!"})
 	})
 
-	mvc := mvc.New(Application.Party("/upload"))
-	mvc.Handle(new(controllers.FileUploadController))
+	// Register the controllers
+	upload := Application.Party("/upload")
+	{
+		upload.Post("/file", func(ctx iris.Context) {
+			new(controllers.FileUploadController).Post(ctx)
+		})
+		upload.Post("/files", func(ctx iris.Context) {
+			new(controllers.FilesUploadController).Post(ctx)
+		})
+	}
 
 	Application.Listen(fmt.Sprintf("%s:%d", config.App.AppHost, config.App.AppPort))
 }
